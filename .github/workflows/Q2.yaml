@@ -1,0 +1,38 @@
+name: Q2 - Archive TOTO with metadata
+
+on:
+  workflow_dispatch:
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get file size and content
+        id: file_info
+        run: |
+          size=$(wc -c < TOTO.txt)
+          content=$(cat TOTO.txt)
+          echo "size=$size" >> $GITHUB_OUTPUT
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$content" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Q2_archive_TOTO.txt
+        run: |
+          echo "Nom et Prénom: AARAB Anas" > Q2_archive_TOTO.txt
+          echo "Date et heure d'exécution: $(date)" >> Q2_archive_TOTO.txt
+          echo "Taille de TOTO.txt: ${{ steps.file_info.outputs.size }} octets" >> Q2_archive_TOTO.txt
+          echo "" >> Q2_archive_TOTO.txt
+          echo "Contenu de TOTO.txt:" >> Q2_archive_TOTO.txt
+          echo "${{ steps.file_info.outputs.content }}" >> Q2_archive_TOTO.txt
+
+      - name: Commit and push new file
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add Q2_archive_TOTO.txt
+          git commit -m "Archive TOTO.txt with metadata as Q2_archive_TOTO.txt"
+          git push
