@@ -1,0 +1,22 @@
+name: Q1 - Archive TOTO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy TOTO.txt to Q1_archive_TOTO.txt
+        run: cp TOTO.txt Q1_archive_TOTO.txt
+
+      - name: Commit and push new file
+        run: |
+          git config --global user.name "Fletcher-Prog"
+          git config --global user.email "aarab.anas04@gmail.com"
+          git add Q1_archive_TOTO.txt
+          git commit -m "Archive TOTO.txt as Q1_archive_TOTO.txt"
+          git push
