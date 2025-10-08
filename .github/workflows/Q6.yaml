@@ -1,0 +1,45 @@
+name: Q6
+
+on:
+  workflow_dispatch:
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get current date and time
+        id: date
+        run: echo "date=$(date +'%d-%m-%Y-%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: Create Q6_archive_date.txt
+        run: |
+          filename="Q6_archive_${{ steps.date.outputs.date }}.txt"
+          echo "Nom et Prénom: AARAB Anas" > "$filename"
+          echo "" >> "$filename"
+          cat Q6.java >> "$filename"
+          echo "" >> "$filename"
+          echo "Taille de Q6.java : $(wc -m < Q6.java) caractères, $(wc -l < Q6.java) lignes" >> "$filename"
+
+      - name: Find previous archive file
+        id: find_previous
+        run: |
+          previous_file=$(ls Q6_archive_*.txt 2>/dev/null | sort -r | head -n 1)
+          echo "previous_file=$previous_file" >> $GITHUB_OUTPUT
+
+      - name: Create Q6_différences.txt
+        if: steps.find_previous.outputs.previous_file != ''
+        run: |
+          previous_file="${{ steps.find_previous.outputs.previous_file }}"
+          current_file="Q6_archive_${{ steps.date.outputs.date }}.txt"
+          diff "$previous_file" "$current_file" > Q6_différences.txt
+
+      - name: Commit and push new files
+        run: |
+          git config --global user.name "Fletcher-Prog"
+          git config --global user.email "aarab.anas04@gmail.com"
+          git add Q6_archive_*.txt Q6_différences.txt
+          git commit -m "Archive Q6.java and differences"
+          git push
