@@ -1,4 +1,4 @@
-name: Q2 - Archive TOTO with metadata
+name: Q2
 
 on:
   workflow_dispatch:
