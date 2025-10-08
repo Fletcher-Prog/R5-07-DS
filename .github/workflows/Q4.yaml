@@ -1,0 +1,29 @@
+name: Q4
+
+on:
+  workflow_dispatch:
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create Q4_archive_date.txt
+        run: |
+          date=$(date +"%d-%m-%Y")
+          filename="Q4_archive_$date.txt"
+          echo "Nom et Prénom: AARAB Anas" > "$filename"
+          echo "" >> "$filename"
+          cat Q4.java >> "$filename"
+
+      - name: Commit and push new file
+        run: |
+          date=$(date +"%d-%m-%Y")
+          filename="Q4_archive_$date.txt"
+          git config --global user.name "Fletcher-Prog"
+          git config --global user.email "aarab.anas04@gmail.com"
+          git add "$filename"
+          git commit -m "Archive Q4.java as $filename"
+          git push
