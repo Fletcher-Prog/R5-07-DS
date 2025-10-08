@@ -14,7 +14,7 @@ jobs:
         run: |
           date=$(date +"%d-%m-%Y")
           filename="Q5_archive_$date.txt"
-          echo "Nom et Prénom: [Ton Nom et Prénom]" > "$filename"
+          echo "Nom et Prénom: AARAB Anas" > "$filename"
           echo "" >> "$filename"
           cat Q5.java >> "$filename"
 
